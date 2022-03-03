@@ -76,7 +76,7 @@ switch type
         %-----average r
         
         r = r(:);
-        alpha = alpha(:)*2;
+%         alpha = alpha(:)*2;
         unique_ang = unique(alpha)*pi/180;
         nStim = numel(unique_ang);
         rhat = mean(reshape(r, nStim, []),2);
