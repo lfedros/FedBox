@@ -77,6 +77,7 @@ switch type
         
         r = r(:);
 %         alpha = alpha(:)*2;
+        alpha = alpha(:);
         unique_ang = unique(alpha)*pi/180;
         nStim = numel(unique_ang);
         rhat = mean(reshape(r, nStim, []),2);
