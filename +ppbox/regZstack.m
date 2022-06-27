@@ -235,7 +235,7 @@ if nCh ==1
     
 %     zStack{iCh} = zstack.registerStackColumn(zStack{iCh});
     
-    zStack{iCh} = int16(mat2gray(zStack{iCh})*2^15);
+    zStack{iCh} = uint16(mat2gray(zStack{iCh})*(2^16-1));
     
    saveastiff(zStack{iCh}, fullfile(info.folderProcessed , [info.expRef, '_zStackMean.tif']));
 else
@@ -245,7 +245,7 @@ else
     for iCh = 1:nCh
         
 
-        zStack{iCh} = int16(mat2gray(zStack{iCh})*2^15);
+        zStack{iCh} = uint16(mat2gray(zStack{iCh})*(2^16-1));
         switch iCh
             case 1
         saveastiff(zStack{iCh}, fullfile(info.folderProcessed , [info.expRef, '_zStackMean_G.tif']));

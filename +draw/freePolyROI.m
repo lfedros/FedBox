@@ -1,4 +1,6 @@
 function [ROI, roiID] = freePolyROI(avgImage, cm)
+% ROI is a cell array; each cell i contains the list of pixel indeces belonging to each ROI(i)
+
 
 if nargin <2
     cm = 'bone'
@@ -12,7 +14,7 @@ figure; sd = imagesc(avgImage);
 caxis([prctile(avgImage(:),1), prctile(avgImage(:),80)]);
 axis image;colormap(cm); hold on
 
-fprintf('free hand ROI selection: \n press r to draw an ROI \n press e to end \n')
+fprintf('free hand ROI selection: \n press r to draw an ROI, double click on last point to complete it \n press e to end \n')
 rn=0;
 map = zeros(size(avgImage,1), size(avgImage,2));
 todo = 'd';

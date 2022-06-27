@@ -1,4 +1,4 @@
-function stimSequence=getStimSequence_LFR(animal, iseries, iexp)
+function [stimSequence, p]=getStimSequence_LFR(animal, iseries, iexp)
 
 SetDefaultDirs;
 
@@ -18,6 +18,7 @@ elseif nargin == 3
 end
 
 p = ProtocolLoad_LFRnew(animal, iseries, iexp);
+
 
 stimSequence.labels=cell(p.nstim, 1);
 stimSequence.seq=zeros(p.nrepeats*p.nstim, 1);
