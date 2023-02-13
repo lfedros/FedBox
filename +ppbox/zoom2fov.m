@@ -19,6 +19,7 @@ function [ fovx, fovy ] = zoom2fov(zoom, micID, expDate)
 %   2016-01-24 function and 2p measurements by L. Federico Rossi
 %   2016-02-05 adapted from infoPixUm in Suite2P folder (SS)
 %   2019-06-24 removed unused input objID,updated measurements for b-scope, added input expDate (LFR)
+%   2022 -09-15 added the latest calibration for bscope (Anyi)
 
 if nargin < 2 || isempty(micID)
     micID = 'bscope';
@@ -57,7 +58,7 @@ switch micID
             measuredVert = [1180, 1067, 977, 898, 837, 783, 731, 692, 651, 614,...
                 584, 556, 535.6, 512, 489, 472 ];
 
-        elseif expDate >= datetime(2019, 05,08)
+        elseif expDate >= datetime(2019, 05,08) && expDate < datetime(2022, 08,01)
 
             zooms = [1 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2 2.1 ...
                 3.1 4.1 5.1 6.1 7.1 8.1 9.1 10.1 11.1 12.1 13.1 14.1 15.1];
@@ -66,6 +67,15 @@ switch micID
                 449 306 231 188 155 135 117 105 95 87 79 73 68 64];
 
             measuredVert = measuredHoriz ;
+%         elseif expDate >= datetime(2022, 08,01)
+        elseif expDate >= datetime(2022, 03,01)
+
+            zooms = (1:1:20);
+
+            measuredHoriz = [920 477.5 334 261.5 221 185 163.5 143.5 133.5 121 109.5 104 96.5 89 83 80 75 72.5 67.5 67];
+
+            measuredVert = [916.5 472 319.5 242.5 189.5 156.5 136 116.5 106 98.5 89.5 84 70.5 65.5 64.5 60.5 55.5 52 47.5 48.5];
+
 
         end
 

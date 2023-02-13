@@ -1,5 +1,9 @@
 function pars = fitTuning(alpha, r, type, fixPars)
 
+% alpha needs to be [0 360]
+
+
+%%
 
 switch type
     
