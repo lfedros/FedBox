@@ -6,7 +6,50 @@ function pars = fitTuning(alpha, r, type, fixPars)
 %%
 
 switch type
-    
+    case 'size'
+
+        if nargin < 4
+            fixPars = nan(1,5);
+        end
+
+    %----hardcoded pars
+        mink = 1;
+        maxk = 10000;
+        minPrefSize = 0;
+        maxPrefSize = 200;
+        
+        %-----average r
+        
+        r = r(:);
+        alpha = alpha(:);
+        unique_ang = unique(alpha)*pi/180;
+        nStim = numel(unique_ang);
+        rhat = mean(reshape(r, nStim, []),2);
+        
+        %-----estimate pref R and pref Size
+        
+        [Rp, Sp] = max(rhat);
+        Sp = unique_ang(Sp);
+        [Ro] = min(rhat);
+
+        
+        %---do the fit
+        pars0 = [Rp, 10, 10, 0, Ro];
+        parslb = [0, 5, 5, 0, Ro-10];
+        parsub = [Rp+10, 1000, 1000, Rp];
+        
+        parslb(~isnan(fixPars)) = fixPars(~isnan(fixPars));
+        parsub(~isnan(fixPars)) = fixPars(~isnan(fixPars));
+        pars0(~isnan(fixPars)) = pars0(~isnan(fixPars));
+
+        pars = lsqcurvefit(@mfun.sizeTun, ...
+            pars0, alpha, r, ...
+            parslb,...
+            parsub);
+
+
+
+
     case 'vm2'
         
         if nargin < 4
