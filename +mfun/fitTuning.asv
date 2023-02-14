@@ -1,7 +1,9 @@
 function pars = fitTuning(alpha, r, type, fixPars)
 
 % type can be 'size', 'vm2', 'vm1', depending on what tuning curve you want
-% to fit: vm1 for orientation tuning; vm2 for direction tuning; size for size tuning
+% to fit: vm1 for orientation tuning
+% vm2 for direction tuning
+% size for size tuning
 % alpha needs to be [0 360] for vm1, vm2, or [0 inf] for size
 
 %%

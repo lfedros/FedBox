@@ -5,11 +5,11 @@ function st_r = sizeTun(pars, stim_size)
 R = pars(1); % amplitude of response
 sigma1 = pars(2); % standard deviation 1 in degrees
 sigma2 = pars(3); % standard deviation 1 in degrees
-k = pars(4); % not sure what this is for
-b = pars(5); % baseline
+b = pars(4); % baseline
+k = pars(5); % not sure what this is for
 s = stim_size; % stimulus size in degrees
 
-st_r = R*(erf(s/sigma1) - k* erf(s/sigma2)) +b;
+st_r = R*(erf(s/sigma1.^2) - k*erf(s/sigma2.^2)) +b;
 
 
 end
