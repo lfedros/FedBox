@@ -1,14 +1,22 @@
-function st_r = sizeTun(pars, stim_size)
+function r = vonMises(pars, alpha)
 
-% f(s) = R*[erf(s/sigma1 - k*erf(s/sigma2)];
+Dp = pars(1)*pi/180; % preferred direction in degrees
+Rp = pars(2); % 
+Ro = pars(3);
+kappa = pars(4)*pi/180; % concentration, in degrees
+alpha = alpha(:)*pi/180;
+kappa = 1/kappa; % 1/kappa is ~ sigma^2 of the gaussian
 
-R = pars(1); 
-sigma1 = pars(2); % standard deviation 1 in degrees
-sigma2 = pars(3); % standard deviation 1 in degrees
-k = pars(4);
-s = stim_size; % stimulus size in degrees
+% s_vm_p = exp( kappa*(cos(alpha-Dp)-1))/ (2*pi*besseli(0,kappa,1));
+% s_vm_n = exp(kappa*(cos(alpha-(Dp+pi))-1))/ (2*pi*besseli(0,kappa,1));
 
-st_r = R*(erf(s/sigma1) - k* erf(s/sigma2));
+s_vm_p = exp( kappa*(cos(alpha-Dp)))/ (2*pi*besseli(0,kappa,1));
 
+s_vm_p = s_vm_p /max(s_vm_p);
+
+% s_vm_p = (s_vm_p - min(s_vm_p))/max(s_vm_p - min(s_vm_p));
+% s_vm_n = (s_vm_n - min(s_vm_n))/max(s_vm_n - min(s_vm_n));
+
+r = Rp*s_vm_p + Ro;
 
 end
