@@ -100,7 +100,7 @@ try
     
     try
         verStr = ['SI.VERSION_MAJOR = ',char(39),'2018b',char(39)];
-        
+
         if ~isempty(strfind(hh, verStr)) % For scanimage 2016b, SF
             str = hh(strfind(hh,'channelSave = '):end);
             ind = strfind(str, 'SI');
@@ -162,8 +162,24 @@ try
             
         end
     catch
+        verStr = ['SI.VERSION_MAJOR = 2021'];
+    if ~isempty(strfind(hh, verStr)) % For scanimage 2021, b2
+        
+         str = hh(strfind(hh, 'channelSave = '):end);
+         ind = strfind(str, 'SI');
+         ch = str2num(str(15 : ind(1)-1));
+         info.nChannels = length(ch);
+         
+         str = hh(strfind(hh, 'actualNumSlices = '):end);
+         ind = strfind(str, 'SI');
+         np = str2num(str(18 : ind(1)-1));
+         info.nPlanes = np;
+        
+        
+    else
         info.nPlanes=1;
         info.nChannels = 1;
+    end
     end
     
     %temporary hack
