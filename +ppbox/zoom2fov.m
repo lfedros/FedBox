@@ -1,4 +1,4 @@
-function [ fovx, fovy ] = zoom2fov(zoom, micID, expDate)
+function [ fovx, fovy ] = zoom2fov(qzoom, micID, expDate)
 
 %   INPUTS:
 
@@ -23,7 +23,7 @@ function [ fovx, fovy ] = zoom2fov(zoom, micID, expDate)
 
 if nargin < 2 || isempty(micID)
     micID = 'bscope';
-elseif ~any(strcmp(micID, {'b', 'bscope', 'b2', 'mom', 'bscope_intrinsic'}))
+elseif ~any(strcmp(micID, {'b', 'bscope', 'b2', 'mom', 'bscope_intrinsic', 'lilrig_intrinsic'}))
     display('WARNING: unknown type of microscope.')
 end
 
@@ -80,9 +80,18 @@ switch micID
         end
 
     case 'b2'
-        zooms = [1.6 1.9 2 2.2];
-        measuredHoriz = [772 653 619.5 565.5];
-        measuredVert = [755 640 605.5 547];
+%         zooms = [1.6 1.9 2 2.2];
+%         measuredHoriz = [772 653 619.5 565.5];
+%         measuredVert = [755 640 605.5 547];
+
+        zooms = [1.3, 1.2, 1.1, 1, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 1, 2.5, 3, 3.5, 4, 4.5, 5, 7, 2, 1.5, 1, 1.2, 1.3, 1.1, 10];
+        zooms = [zooms, 10:25, 29];
+
+        measuredHoriz = [873.5, 952, 1093.5, 1307.5, 829, 756, 710, 673, 630.5, 598.5, 568.5, 1271, 467, 382.5, 329.5, 289, 258, 232.5, 168, 571.5, 767, 1275, 962.5, 876.5, 1081.5, 118];
+        measuredHoriz = [measuredHoriz, 116.5, 106.5, 98.5, 90.5, 84.75, 78.25, 75, 71, 64, 63, 61.75, 57.5, 55.25, 51, 50.5, 48.5, 41.75];
+        
+        measuredVert = measuredHoriz;
+
     case 'mom'
         zooms = [3 4];
         measuredHoriz = [155 117];
@@ -92,13 +101,53 @@ switch micID
         zooms = [1];
         measuredHoriz = [3550];
         measuredVert = [3550];
+
+    case 'lilrig_intrinsic' % assumes 1.2X obj was used
+        zooms = [1];
+        measuredHoriz = [3300]; % this is a temporary hack, the fov size is not fixed, depends on the camera ROI
+        measuredVert = [3300]; % this is a temporary hack, the fov size is not fixed, depends on the camera ROI
 end
 
 if numel(zooms)>1
-    curveX = fit(zooms', measuredHoriz', 'exp2');
-    fovx = curveX(zoom);
-    curveY = fit(zooms', measuredVert', 'exp2');
-    fovy = curveY(zoom);
+
+%     curveX = fit(zooms', 1./measuredHoriz', 'poly1');
+%     fovx = 1./curveX(zooms);
+% % 
+% %     figure;
+% %     subplot(3,1,1);
+% %     plot(zooms, 1./measuredHoriz, 'ob');
+% %     hold on;
+% %     plot(zooms, 1./fovx, '-r');
+% %     ylabel('inverse fov size (1/um)');
+% % 
+% %     subplot(3,1,2);
+% %     plot(zooms, measuredHoriz, 'ob');
+% %     hold on;
+% %     plot(zooms, fovx, '-r');
+% %     ylabel('fov size (um)');
+% % 
+% %     subplot(3,1,3);
+% %     plot(zooms, abs(measuredHoriz'-fovx), '-ok');
+% %     
+% %     xlabel('zooms')
+% %     ylabel('absolute error (um)');
+% 
+%     curveY = fit(zooms', 1./measuredVert', 'poly1');
+%     fovy = 1./curveY(zoom);
+   
+if qzoom < 2
+
+fovx = interp1(zooms, measuredHoriz, qzoom, 'pchip', NaN);
+fovy = interp1(zooms, measuredVert, qzoom, 'pchip', NaN);
+
+
+else
+    curveX = fit(zooms', 1./measuredHoriz', 'poly1');
+    fovx = 1./curveX(qzoom);
+    curveY = fit(zooms', 1./measuredVert', 'poly1');
+    fovy = 1./curveY(qzoom);
+end
+
 else
 
     fovx = measuredHoriz;

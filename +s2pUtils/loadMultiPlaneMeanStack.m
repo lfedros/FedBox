@@ -23,19 +23,19 @@ for iExp = 1:nExp
     end
     [micronsX{iExp}, micronsY{iExp}, micronsZ{iExp}] = ppbox.getPxXYZ(info);
     
-    if iExp == 1
-        if db(1).starterYXPlane(3) > 0
-            starterXYZ = [micronsX{iExp}(db(1).starterYXPlane(2)), ...
-                micronsY{iExp}(db(1).starterYXPlane(1)),...
-                micronsZ{iExp}(db(1).starterYXPlane(1), db(1).starterYXPlane(3)) + db(1).ObjZ];
-        elseif isfield(db, 'starterZ')
-            starterXYZ = [micronsX{iExp}(db(1).starterYXPlane(2)), ...
-                micronsY{iExp}(db(1).starterYXPlane(1)),...
-                db(1).starterZ];
-            
-        end
-    end
-    
+%     if iExp == 1
+%         if db(1).starterYXPlane(3) > 0
+%             starterXYZ = [micronsX{iExp}(db(1).starterYXPlane(2)), ...
+%                 micronsY{iExp}(db(1).starterYXPlane(1)),...
+%                 micronsZ{iExp}(db(1).starterYXPlane(1), db(1).starterYXPlane(3)) + db(1).ObjZ];
+%         elseif isfield(db, 'starterZ')
+%             starterXYZ = [micronsX{iExp}(db(1).starterYXPlane(2)), ...
+%                 micronsY{iExp}(db(1).starterYXPlane(1)),...
+%                 db(1).starterZ];
+%             
+%         end
+%     end
+%     
     micronsZ{iExp} = micronsZ{iExp} + db(iExp).ObjZ;
 
     ny = numel(micronsY{iExp});
@@ -68,9 +68,14 @@ for iExp = 1:nExp
             dummyG = zeros(ny, nx);
             dummyG(ops.yrange,ops.xrange) = ops.mimg1(ops.yrange, ops.xrange);
             dummyR = zeros(ny, nx);
-            dummyR(ops.yrange,ops.xrange) = ops.mimgRED(ops.yrange, ops.xrange);
             frameG(:,:,planeCount) = dummyG;
+            if isfield(ops, 'mimgRED')
+            dummyR(ops.yrange,ops.xrange) = ops.mimgRED(ops.yrange, ops.xrange);
             frameR(:,:,planeCount) = dummyR;
+            else
+            frameR(:,:,planeCount) = NaN(size(frameG(:,:,1)));
+    
+            end
 %             [ fovx, fovy ] = zoom2fov(info.zoomFactor);
 %             PxSz = (fovx+fovy)/(2*512);
         end

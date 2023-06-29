@@ -93,10 +93,21 @@ try
     % getting some parameters from the header
     hh=header{1};
     
-    str = hh(strfind(hh, 'scanZoomFactor = '):end);
-    ind = strfind(str, 'SI');
-    info.zoomFactor = str2double(str(18 : ind(1)-1));
-    
+%     str = hh(strfind(hh, 'scanZoomFactor = '):end);
+%     ind = strfind(str, 'SI');
+%     info.zoomFactor = str2double(str(18 : ind(1)-1));
+% 
+%     str = hh(strfind(hh, 'linesPerFrame = '):end);
+%     ind = strfind(str, 'SI');
+%     info.zoomFactor = str2double(str(18 : ind(1)-1));
+
+    values = getVarFromHeader2(hh, ...
+                {'scanZoomFactor', 'linesPerFrame', 'pixelsPerLine'});
+
+      info.scanZoomFactor = str2double(values{1});
+            info.zoomFactor = str2double(values{1});
+            info.scanLinesPerFrame = str2double(values{2});
+            info.scanPixelsPerLine = str2double(values{3});
     
     try
         verStr = ['SI.VERSION_MAJOR = ',char(39),'2018b',char(39)];
@@ -200,6 +211,24 @@ function values = getVarFromHeader(str, fields)
 % values is a cell array of corresponding values, they will be strings
 
 ff = strsplit(str, {' = ', 'scanimage.SI4.'});
+if ~iscell(fields)
+    fields = cell(fields);
+end
+values = cell(size(fields));
+
+for iField = 1:length(fields)
+    ind = find(ismember(ff, fields{iField}));
+    values{iField} = ff{ind+1};
+end
+end
+
+function values = getVarFromHeader2(str, fields)
+
+% str is the header
+% fields is a cell array of strings with variable names
+% values is a cell array of corresponding values, they will be strings
+
+ff = strsplit(str, {' = ', '\nSI.hRoiManager.'});
 if ~iscell(fields)
     fields = cell(fields);
 end

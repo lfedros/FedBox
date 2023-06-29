@@ -25,7 +25,7 @@ switch type
         alpha = alpha(:);
         unique_ang = unique(alpha)*pi/180;
         nStim = numel(unique_ang);
-        rhat = mean(reshape(r, nStim, []),2);
+        rhat = nanmean(reshape(r, nStim, []),2);
         
         %-----estimate pref R and pref Size
         
@@ -41,9 +41,12 @@ switch type
         parslb(~isnan(fixPars)) = fixPars(~isnan(fixPars));
         parsub(~isnan(fixPars)) = fixPars(~isnan(fixPars));
         pars0(~isnan(fixPars)) = pars0(~isnan(fixPars));
+        
+        %remove nans
+        nan_vals = isnan(r);
 
         pars = lsqcurvefit(@mfun.sizeTun, ...
-            pars0, alpha, r, ...
+            pars0, alpha(~nan_vals), r(~nan_vals), ...
             parslb,...
             parsub);
 
@@ -68,7 +71,7 @@ switch type
         alpha = alpha(:);
         unique_ang = unique(alpha)*pi/180;
         nStim = numel(unique_ang);
-        rhat = mean(reshape(r, nStim, []),2);
+        rhat = nanmean(reshape(r, nStim, []),2);
         
         %-----estimate pref R and pref Dir
         
@@ -101,8 +104,11 @@ switch type
         parsub(~isnan(fixPars)) = fixPars(~isnan(fixPars));
         pars0(~isnan(fixPars)) = pars0(~isnan(fixPars));
 
+        %remove nans
+        nan_vals = isnan(r);
+
         pars = lsqcurvefit(@mfun.vonMises2, ...
-            pars0, alpha, r, ...
+            pars0, alpha(~nan_vals), r(~nan_vals), ...
             parslb,...
             parsub);
         
@@ -127,7 +133,7 @@ switch type
         alpha = alpha(:);
         unique_ang = unique(alpha)*pi/180;
         nStim = numel(unique_ang);
-        rhat = mean(reshape(r, nStim, []),2);
+        rhat = nanmean(reshape(r, nStim, []),2);
         
         %-----estimate pref R and pref Dir
         
@@ -156,9 +162,12 @@ switch type
         parslb(~isnan(fixPars)) = fixPars(~isnan(fixPars));
         parsub(~isnan(fixPars)) = fixPars(~isnan(fixPars));
         pars0(~isnan(fixPars)) = pars0(~isnan(fixPars));
+        
+        %remove nans
+        nan_vals = isnan(r); 
 
         pars = lsqcurvefit(@mfun.vonMises, ...
-            pars0, alpha, r, ...
+            pars0, alpha(~nan_vals), r(~nan_vals), ...
             parslb,...
             parsub);
         
