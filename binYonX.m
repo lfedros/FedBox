@@ -10,7 +10,7 @@ nQuant = numel(edges)-1;
 
 [~,~,idx] = histcounts(X, edges);
 
-Xbin = edges(1:end-1) - 0.5*diff(edges);
+Xbin = edges(1:end-1) + 0.5*diff(edges);
 
 for iQ = 1:nQuant
 
