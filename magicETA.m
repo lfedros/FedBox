@@ -1,7 +1,8 @@
-function [ETAmat, ETA, ETAse, window] = magicETA(t, signal, etaT, periT)
+function [ETAmat, ETA, ETAse, window] = magicETA(t, signal, etaT, periT, bsl)
 % t are the timestamps of each sample in signal. etaT are the event
 % timestasmps you want to trigger the average to, periT is a 2 element
 % vector that specifies the window around etaT to be considered
+
 
 %% one line magic peri-stimulus triggered average, courtesy of CB wisdom
 if numel(periT) ==2
@@ -10,7 +11,14 @@ else
     window = periT;
 end
 
-bsl = periT(periT <0);
+if nargin < 5
+    bsl = window(window <0);
+else
+    if numel(bsl) ==2
+        bsl = window(window > bsl(1) & window<bsl(2));
+    end
+end
+
 % ETAmat = interp1(t,signal,bsxfun(@plus,window,etaT'));
 % [nStim, nRep] = size(etaT);
 newT = permute(etaT, [2, 3, 1]);
@@ -20,8 +28,8 @@ ETAbsl = prctile(interp1(t,signal,bsxfun(@plus,bsl,newT)), 50,2);
 ETAmat = bsxfun(@minus,ETAmat, ETAbsl);
 
 %% compute median resp and se
-ETA = squeeze(mean(ETAmat,1));
-ETAse = squeeze(std(ETAmat,1,1)/sqrt(size(etaT,2)));
+ETA = squeeze(nanmean(ETAmat,1));
+ETAse = squeeze(nanstd(ETAmat,1,1)/sqrt(size(etaT,2)));
 
 % %% plotting
 % figure
