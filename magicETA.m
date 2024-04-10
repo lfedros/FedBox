@@ -1,7 +1,9 @@
 function [ETAmat, ETA, ETAse, window] = magicETA(t, signal, etaT, periT, bsl)
-% t are the timestamps of each sample in signal. etaT are the event
-% timestasmps you want to trigger the average to, periT is a 2 element
-% vector that specifies the window around etaT to be considered
+
+% etaT is a nStim * nReps matrix of onset times
+% signal is an nT*1 vector of activity
+% t is a nT*1 vector of time stamps
+% periT is a 2 element vector that specifies the window around etaT to be considered
 
 
 %% one line magic peri-stimulus triggered average, courtesy of CB wisdom

@@ -1,4 +1,4 @@
-function PlotDisplacedLFR(tt, signals, space, color)
+function PlotDisplacedLFR(tt, signals, space, color, width)
 % signals are nT X nSignals
 [nT, nS] = size(signals);
 
@@ -9,6 +9,9 @@ elseif size(color,1) ==1
     color = repmat(color, nS,1);
 end
 
+if nargin <5
+    width = 1; 
+end
 
 if isempty(tt)
     tt = repmat(makeVec(1:nT), 1, nS);
@@ -23,7 +26,7 @@ disp = (0:nS-1);
 disp = sort(disp,'descend') *space;
 
 for is = 1: nS
-plot(tt(:, is), signals(:, is)+ disp(is), 'Color', color(is, :), 'LineWidth', 1); hold on
+plot(tt(:, is), signals(:, is)+ disp(is), 'Color', color(is, :), 'LineWidth', width); hold on
 end
 xlim([min(tt(:)), max(tt(:))])
 ylim([0 + bot - space, max(disp) + top])
