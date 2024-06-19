@@ -1,0 +1,164 @@
+
+%% load the data
+
+clear; 
+
+data_root = 'D:\OneDrive - University College London\Data\Dendrites\Dual_imaging_test\FR237';
+addpath(genpath('D:\OneDrive - Fondazione Istituto Italiano Tecnologia\Documents\Code\Stable\FedBox'));
+
+chG = readtable(fullfile(data_root, "chG.csv"));
+chR = readtable(fullfile(data_root, "chR.csv"));
+
+spines_G = chG{:, 2:3:end-3}';
+den_G = chG{:, end-2}';
+
+spines_R = chR{:, 2:3:end-3}';
+den_R = chR{:, end-2}';
+
+clear chG chR;
+%% smooth the data
+
+spines_G = gaussFilt(spines_G', 5)';
+spines_R = gaussFilt(spines_R', 5)';
+
+den_G = gaussFilt(den_G', 2)';
+den_R = gaussFilt(den_R', 2)';
+
+[nS, nT] = size(spines_G);
+
+time = (1:nT)/30; 
+%% correct soma R by soma G
+
+opt.pCell = 50;
+[den_R_c, den_corr] = s2pUtils.estimateNeuropil_LFR(den_R,den_G,opt);
+
+den_R_cf = bsxfun(@rdivide, den_R_c, den_corr.F0);
+den_R_f = bsxfun(@rdivide, bsxfun(@minus, den_R, den_corr.F0), den_corr.F0);
+
+figure;
+plot(den_R_c); hold on
+plot(den_R)
+plot(den_G*den_corr.corrFactor(2) +den_corr.corrFactor(1) , '--k')
+
+%% correct spine R by soma R
+
+
+[spines_R_c, spines_R_corr] = s2pUtils.estimateNeuropil_LFR(spines_R,repmat(den_R_c, nS, 1), opt);
+spines_R_cf = bsxfun(@rdivide, spines_R_c, spines_R_corr.F0);
+spines_R_f = bsxfun(@rdivide, bsxfun(@minus, spines_R, spines_R_corr.F0), spines_R_corr.F0);
+
+
+[spines_G_c, spines_G_corr] = s2pUtils.estimateNeuropil_LFR(spines_G,repmat(den_G, nS, 1), opt);
+spines_G_cf = bsxfun(@rdivide, spines_G_c, spines_G_corr.F0);
+
+
+[spines_RcorrG, spines_RonG_corr] = s2pUtils.estimateNeuropil_LFR(spines_R_cf,spines_G_cf, opt);
+spines_G_cf_scaledR = bsxfun(@plus, bsxfun(@times, spines_G_cf, spines_RonG_corr.corrFactor(:, 2)), spines_RonG_corr.corrFactor(:, 1));
+
+
+%% plot example results
+iS = 6
+
+figure;
+
+subplot(2,5,1:2)
+plot(time, spines_R_f(iS,:), 'Color',[0.5 0.2 0.2]); hold on
+plot(time,den_R_cf, '--', 'Color',[0.4 0.4 0.4]);
+plot(time,spines_R_cf(iS,:), 'Color', [1 0 0], 'Linewidth', 1); hold on
+ylim([-1 4])
+xlim([50 150])
+formatAxes
+ylabel('dF/F')
+
+subplot(2,5,3:4)
+plot(time, spines_R_f(iS,:), 'Color',[0.5 0.2 0.2]); hold on
+plot(time,den_R_cf, '--', 'Color',[0.4 0.4 0.4]);
+plot(time,spines_R_cf(iS,:), 'Color', [1 0 0], 'Linewidth', 1); hold on
+ylim([-1 4])
+xlim([400 500])
+formatAxes
+
+subplot(2,5,5)
+scatter(den_R_f, spines_R_f(iS, :), 10, [0 0 0], MarkerEdgeAlpha=.2); hold on; axis square
+edges = prctile(spines_R_f(iS, :), 0:5:100);
+[aveY, aveX, Xbin, stdY] = binYonX(den_R_f, spines_R_f(iS, :), edges, 1);
+plot(aveX, aveY, 'r');
+xlim([-1 4])
+ylim([-1 4])
+formatAxes
+
+subplot(2,5,6:7)
+plot(time,spines_G_cf_scaledR (iS, :), 'Color', [0.2 1 0.2]); hold on
+plot(time,spines_R_cf(iS,:) , 'Color', [1 0.2 0.2])
+ylim([-1 4])
+xlim([50 150])
+formatAxes
+ylabel('dF/F')
+xlabel('Time (s)')
+
+subplot(2,5,8:9)
+plot(time,spines_G_cf_scaledR (iS, :), 'Color', [0.2 1 0.2]); hold on
+plot(time,spines_R_cf(iS,:) , 'Color', [1 0.2 0.2])
+ylim([-1 4])
+xlim([400 500])
+formatAxes
+xlabel('Time (s)')
+
+subplot(2,5,10)
+scatter(spines_G_cf_scaledR(iS, :), spines_R_cf(iS,:), 10, [0 0 0], MarkerEdgeAlpha=.2); hold on; axis square
+edges = prctile(spines_R_cf(iS, :), 0:5:100);
+[aveY, aveX, Xbin, stdY] = binYonX(spines_G_cf_scaledR (iS, :), spines_R_cf(iS,:), edges, 1);
+plot(aveX, aveY, 'r');
+xlim([-1 4])
+ylim([-1 4])
+formatAxes
+
+
+%% compare spine G with spine R
+
+
+
+
+
+%% plot
+
+figure;
+for iS = 1:40
+plot(gaussFilt(spines_G(:, iS),5)); hold on
+plot(gaussFilt(spines_R(:, iS),3))
+pause; cla;
+end
+
+figure;
+plot(spines_R(:, 2), spines_G(:, 2), 'o')
+
+
+figure;
+subplot(2,1,1)
+imagesc(spines_R');
+subplot(2,1,2)
+imagesc(spines_G');
+
+figure; 
+
+plot(den_G);
+
+
+
+
+
+
+
+% alternative
+
+b = robustfit(den_R', spines_R(iS,:)');
+
+test_c = spines_R(iS,:) - den_R*b(2) - b(1);
+
+
+figure;
+
+subplot(1,5,1:4)
+plot(test_c); hold on
+plot(den_R)
+plot(spines_R(iS,:))

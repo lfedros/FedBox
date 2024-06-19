@@ -97,4 +97,4 @@ fprintf('\n')
 neuropCorrPars.fitNeuro=fitNeuro;
 neuropCorrPars.corrFactor=corrFactor;
 neuropCorrPars.lowCell=lowCell;
-neuropCorrPars.F0 = corrFactor(:, 2).*fitNeuro(:, 1) + npPars.corrFactor(:, 1);
+neuropCorrPars.F0 = corrFactor(:, 2).*fitNeuro(:, 1) + corrFactor(:, 1);
