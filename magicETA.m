@@ -1,10 +1,16 @@
 function [ETAmat, ETA, ETAse, window] = magicETA(t, signal, etaT, periT, bsl)
+%%INPUTS
 
 % etaT is a nStim * nReps matrix of onset times
 % signal is an nT*1 vector of activity
 % t is a nT*1 vector of time stamps
 % periT is a 2 element vector that specifies the window around etaT to be considered
 
+%%OUTPUTS
+%ETAmat
+%ETA
+%ETAse
+%window
 
 %% one line magic peri-stimulus triggered average, courtesy of CB wisdom
 if numel(periT) ==2
