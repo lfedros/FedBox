@@ -1,6 +1,6 @@
 # FedBox
 
-|                   | Postdoc |  PhD     | Undergrad | Assistant/Engineer |
+|                   | Postdoc      |  PhD       | Undergrad | Assistant/Engineer |
 |:------------------|:------------:|:----------:|:---------:|:------------------:|
 
 |Supervision        |--------------|------------|-----------|--------------------|
