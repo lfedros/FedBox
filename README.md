@@ -14,10 +14,18 @@
 |***Funding***|--------------|------------|-----------|--------------------|
 |Applications|Y|N|N|N|
 |Help PI grants|Y|Y|N|N|
-|***Lab citizenship**|--------------|------------|-----------|--------------------|
+|***Lab citizenship***|--------------|------------|-----------|--------------------|
 |Data Club|Y|Y|Y|N|
 |Journal Club|Y|Y|Y|N|
 |Paper review|Y|Y|N|N|
 |***Lab house keeping***|--------------|------------|-----------|--------------------|
 |Orders|Y|Y|N|Y|
 |Animal colony|Y|Y|N|Y|
+
+<style
+  type="text/css">
+h1 {color:red;}
+
+p {color:blue;}
+</style>
+<p>okay</p>
