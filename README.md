@@ -2,7 +2,7 @@
 
 |   |**Postdoc**|***PhD**|**Undergrad**|**Assistant/Engineer**|
 |--:|:-------:|:---:|:---------:|:-------------------:|
-|<span style="color:blue">some *blue* text</span>|--------------|------------|-----------|--------------------|
+|${\color{green}Supervision}$|--------------|------------|-----------|--------------------|
 |*Supervised by*|PI|PI & Postdoc|-PI/Postdoc|PI|
 |*Supervising*|PhD, Undergrad|Undergrad|N|N|
 |***Research***|--------------|------------|-----------|--------------------|
