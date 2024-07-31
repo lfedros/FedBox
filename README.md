@@ -5,7 +5,7 @@
 |***Supervision***|--------------|------------|-----------|--------------------|
 |*Supervised by*|PI|PI & Postdoc|-PI/Postdoc|PI|
 |*Supervising*|PhD, Undergrad|Undergrad|N|N|
-|***Research***|--------------|------------|-----------|--------------------|
+|+***Research***|--------------|------------|-----------|--------------------|
 |Independent Project|Y|Y|N|N|
 |Experimental work|Y|Y|Y|Y|
 |Analysis|Y|Y|Y|N|
