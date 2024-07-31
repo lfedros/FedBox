@@ -2,7 +2,7 @@
 
 |   |**Postdoc**|***PhD**|**Undergrad**|**Assistant/Engineer**|
 |--:|:-------:|:---:|:---------:|:-------------------:|
-|***Supervision***|--------------|------------|-----------|--------------------|
+|$${\color{red}***Supervision***}$$|--------------|------------|-----------|--------------------|
 |*Supervised by*|PI|PI & Postdoc|-PI/Postdoc|PI|
 |*Supervising*|PhD, Undergrad|Undergrad|N|N|
 |***Research***|--------------|------------|-----------|--------------------|
@@ -22,10 +22,3 @@
 |Orders|Y|Y|N|Y|
 |Animal colony|Y|Y|N|Y|
 
-<style
-  type="text/css">
-h1 {color:red;}
-
-p {color:blue;}
-</style>
-<p>okay</p>
