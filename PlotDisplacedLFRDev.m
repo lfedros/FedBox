@@ -3,7 +3,7 @@ function PlotDisplacedLFRDev(tt, signals, space, color)
 [nT, nS] = size(signals);
 
 if nargin <4
-    color = lines(nS);
+    color = hsv(nS);
 end
 if isempty(tt)
     tt = 1: nT;
